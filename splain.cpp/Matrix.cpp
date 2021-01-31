@@ -1,6 +1,7 @@
 #include "Matrix.h"
 
 void showMat(vector <vector <double>> S) {
+	cout << "\nThe MATRIX has you ? D: \n\n";
 	for (int i = 0; i < S[0].size(); ++i)
 	{
 		for (int j = 0; j < S[0].size(); ++j)
@@ -18,7 +19,7 @@ vector<vector <double>> getMat(const char* fileName) {
 	vector <double> vecx, vecy, vect;
 	ifstream fin(fileName);
 	
-	cout << "Ѕазовые координаты из файла source.txt :\n";
+	cout << "Ѕазовые координаты из файла source.txt :\n\n";
 	cout << setw(6) << 'X' << " " << setw(6) << 'Y' << '\n';
 	for (int i = 0;!fin.eof();i++) {
 		fin >> bar;
@@ -48,7 +49,7 @@ vector<vector <double>> getMat(const char* fileName) {
 		++k;
 	}
 	
-	for (int i = k,j=0,fo,foo; i < k-i + m-2; ++i) { //заполн€ем услови€ на промежуточных границах 
+	for (int i = k,j=0,fo,foo,kk=k; i < kk+m-2; ++i) { //заполн€ем услови€ на промежуточных границах 
 		fo = 4 * j; foo = 4 * (j + 1);			  //между функци€ми S[i-1][xi]=S[i][xi] ..
 		mat[i][fo + 0] = 1; 
 		mat[i][foo + 0] = -1;
@@ -56,13 +57,13 @@ vector<vector <double>> getMat(const char* fileName) {
 		mat[i][foo + 1] = -vecx[j+1];
 		mat[i][fo + 2] = vecx[j+1] * vecx[j+1];
 		mat[i][foo + 2] = -mat[i][fo + 2];
-		mat[i][fo + 3] = mat[i][2] * vecx[j+1];
+		mat[i][fo + 3] = mat[i][fo + 2] * vecx[j+1];
 		mat[i][foo + 3] = -mat[i][fo + 3];
 		++j;
 		++k;
 	}
 
-	for (int i = k, j = 0, fo, foo; i < k-i + m - 2; ++i) 
+	for (int i = k, j = 0, fo, foo,kk=k; i < kk + m - 2; ++i) 
 	{											   //заполн€ем услови€ на промежуточных границах 
 		fo = 4 * j; foo = 4 * (j + 1);			  //между функци€ми дл€ производной первого
 		mat[i][fo + 1] = 1;						 //пор€дка  S'[i-1][xi]=S'[i][xi] ..
@@ -70,36 +71,29 @@ vector<vector <double>> getMat(const char* fileName) {
 		mat[i][fo + 2] = 2*vecx[j+1];
 		mat[i][foo + 2] = -2*vecx[j+1];
 		mat[i][fo + 3] = 3*vecx[j+1] * vecx[j+1];
-		mat[i][foo + 3] = -3*mat[i][fo + 3];
+		mat[i][foo + 3] = -mat[i][fo + 3];
 		
 		++j;
 		++k;
 	}
 
-	for (int i = k, j = 0, fo, foo; i < k-i + m - 2; ++i)
+	for (int i = k, j = 0, fo, foo,kk=k; i < kk + m - 2; ++i)
 	{											   //заполн€ем услови€ на промежуточных границах 
 		fo = 4 * j; foo = 4 * (j + 1);			  //между функци€ми дл€ производной второго
 		mat[i][fo + 2] = 1;						 //пор€дка  S''[i-1][xi]=S''[i][xi] ..
 		mat[i][foo + 2] = -1;
 		mat[i][fo + 3] = 3 * vecx[j+1];
-		mat[i][foo + 3] = -3 * vecx[j+1];
-		
-		++j;
+		mat[i][foo + 3] = -mat[i][fo + 3];
+		++j; 
 		++k;
 	}
 
-	for (int i = k, j = 0, fo, foo; i < k-i + m - 2; ++i)
-	{											   //заполн€ем услови€ поведени€ фукнции 
-		fo = 4 * j; foo = 4 * (j + 1);			  //на внешних границах через производные 
-		mat[i][fo + 2] = 1;						 //второго пор€дка  S''[0][x0]=0, S''[n-1][xn]=0 ..
-		mat[i][foo + 2] = -1;					//последнее
-		mat[i][fo + 3] = 3 * vecx[j+1];
-		mat[i][foo + 3] = -3 * vecx[j+1];
+	mat[k][m-2] = 1;						   //заполн€ем услови€ поведени€ фукнции 
+	mat[k][m-1] = 3 * vecx[0];				  //на внешних границах через производные
+	++k;									 //второго пор€дка  S''[0][x0]=0, S''[n-1][xn]=0 ..
+	mat[k][n-2] = 1;						//ps последие уравнени€ 
+	mat[k][n-1] = 3 * vecx[m-1];				
 
-		++j;
-		++k;
-	}
-		
 	return mat;
 }
 
