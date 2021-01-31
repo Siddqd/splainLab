@@ -2,10 +2,15 @@
 //
 #include "matrix.h"
 #include <iostream>
+const char* fileXY = "source.txt";
 
 int main()
-{
-    std::cout << "Hello World!\n";
+{   
+    setlocale(LC_ALL, "rus");
+    vector <vector <double> > S;
+    S = getMat(fileXY);
+    showMat(S);
+    return 0;
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"

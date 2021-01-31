@@ -2,9 +2,13 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <iomanip>
+
 using namespace std;
 
-vector <vector <double>> getMat(char*);
+void showMat(vector < vector <double>>);
+
+vector <vector <double>> getMat(const char*);
 
 int detA(vector <vector <double>>);
 
